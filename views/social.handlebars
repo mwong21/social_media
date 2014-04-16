@@ -11,9 +11,10 @@
 
 <form id="logging_in" role="form" method="post" action="/social">
 
-<script>
+<script type="text/javascript">
 
 var loggedin = false;
+
 
   window.fbAsyncInit = function() {
   FB.init({
@@ -35,6 +36,8 @@ var loggedin = false;
       // have logged in to the app.
 
       testAPI();
+
+
 
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
@@ -63,6 +66,7 @@ var loggedin = false;
    js = d.createElement('script'); js.id = id; js.async = true;
    js.src = "//connect.facebook.net/en_US/all.js";
    ref.parentNode.insertBefore(js, ref);
+
   }(document));
 
   // Here we run a very simple test of the Graph API after login is successful. 
@@ -71,10 +75,12 @@ var loggedin = false;
   // added
 
 
+
   function testAPI() {
 
     loggedin = true;
     console.log('Welcome!  Fetching your information.... ');
+
 
     FB.api('/me', function(response) {
       console.log('Good to see you, ' + response.name + '.');
@@ -82,12 +88,16 @@ var loggedin = false;
              console.log('Good to see you, ' + response.id + '.');
              console.log(response);
              testing(response);
+console.log("TESTING");
+             response.name;
+
+             
+
+
 
     });
 
 
-    // added stuff
-    res.render('social');
 
   }
 
@@ -122,11 +132,6 @@ var loggedin = false;
 {scope: 'email,user_likes'});
 
 
-
-if(loggedin == true){
-
-}
-
 </script>
 
 <!--
@@ -135,9 +140,8 @@ if(loggedin == true){
 
 <fb:login-button show-faces="true" width="200" max-rows="1" scope="email, user_birthday,user_likes, user_groups, user_photos"></fb:login-button>
 
-<a href = "./social">  <button type="button">Continue after logging in</button> </a>
-
 
 </form>
+
 </body>
 </html>

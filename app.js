@@ -23,7 +23,10 @@ app.use(express.bodyParser());
 
 //routes
 app.get('/', index.view);
-
+app.get('/social', function (req, res) {
+  res.render('social');
+})
+//app.post('/social', social.getSocial);
 
 
 //set environment ports and start application
