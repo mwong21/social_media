@@ -2,6 +2,19 @@
 var dotenv = require('dotenv');
 dotenv.load();
 
+var graph = require('fbgraph');
+console.log("in auth")
+
+
+// Add facebook api setup
+
+
+
+
+// code is set
+  // we'll send that and get the access token
+console.log("made it")
+  exports.graph = graph;
 
 /**
 * Add your authentication apis here with example like the bottom

@@ -9,13 +9,17 @@
 <div id="fb-root"></div>
 
 
-<form id="logging_in" role="form" method="post" action="/social">
-
 <script type="text/javascript">
 
+var array = [];
+var temp = {};
+
+var graphNode;
+
 var loggedin = false;
+giantLogin(graphNode);
 
-
+function giantLogin(graphParam) {
   window.fbAsyncInit = function() {
   FB.init({
     appId      : 608436179247204,
@@ -35,7 +39,10 @@ var loggedin = false;
       // login status of the person. In this case, we're handling the situation where they 
       // have logged in to the app.
 
-      testAPI();
+      var node = testAPI();
+      graphParam = node;
+console.log("this is node: " + node)
+      return node;
 
 
 
@@ -58,6 +65,7 @@ var loggedin = false;
     }
   });
   };
+}
 
   // Load the SDK asynchronously
   (function(d){
@@ -87,11 +95,28 @@ var loggedin = false;
              console.log('Good to see you, ' + response.email + '.');
              console.log('Good to see you, ' + response.id + '.');
              console.log(response);
-             testing(response);
+
+             var returnedObj = {};
+             returnedObj = testing(response);
+
+             console.log("this is returned obj" + returnedObj)
+             return returnedObj;
 console.log("TESTING");
              response.name;
 
-             
+             tempJSON = {};
+
+
+
+
+              graph.get("/me", function(err, res) {
+    //Store user data after stringfying it
+    var data = JSON.stringify(res);
+    //Log returned data
+    console.log("MY DATA!!!!!!!!!!!!!!!!!!!!!!!!! " + data);
+    });
+
+
 
 
 
@@ -105,31 +130,31 @@ console.log("TESTING");
   console.log("response" + response);
   console.log(response);
 
-
   FB.api('/'+response.id, function(response2) {
       console.log(response2);
       console.log(response2.birthday);
 
+array.push(response2.birthday);
+temp.birthday = response2.birthday;
+console.log("temp: " + temp.birthday);
+
+console.log("length of array " + array.length);
+console.log("this is temp!! " + temp.birthday);
+
+return temp.birthday;
     });
+
+  console.log("length of array NOW " + array.length);
+return temp.birthday;
 
   }
 
 
+document.write(graphNode);
 
+console.log("length of array THE END" + array.length);
 
-   FB.login(function(response) {
-   if (response.authResponse) {
-     console.log('Welcome!  Fetching your information.... ');
-     FB.api('/me', function(response) {
-       console.log('Good to see you, ' + response.name + '.');
-
-
-     });
-   } else {
-     console.log('User cancelled login or did not fully authorize.');
-     }
-   },
-{scope: 'email,user_likes'});
+console.log("temp: " + temp.birthday);
 
 
 </script>
@@ -141,7 +166,10 @@ console.log("TESTING");
 <fb:login-button show-faces="true" width="200" max-rows="1" scope="email, user_birthday,user_likes, user_groups, user_photos"></fb:login-button>
 
 
-</form>
+
+{{#each temp}}
+<p>{{birthday}}</p>
+{{/each}}
 
 </body>
 </html>

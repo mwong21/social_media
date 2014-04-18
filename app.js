@@ -7,8 +7,11 @@ var handlebars = require('express3-handlebars');
 var twit = require('twit');
 var app = express();
 
+
 //route files to load
 var index = require('./routes/index');
+var social = require('./routes/social');
+var graph = require('fbgraph');
 
 //database setup - uncomment to set up your database
 //var mongoose = require('mongoose');
@@ -23,10 +26,8 @@ app.use(express.bodyParser());
 
 //routes
 app.get('/', index.view);
-app.get('/social', function (req, res) {
-  res.render('social');
-})
-//app.post('/social', social.getSocial);
+app.get('/social', social.view);
+app.post('/social', social.view);
 
 
 //set environment ports and start application
@@ -41,7 +42,7 @@ var dotenv = require('dotenv');
 dotenv.load();
 
 // Add facebook api setup
-var graph = require('fbgraph');
+
 //graph.authorize('client_id', process.env.facebook_app_id);
 //graph.authorize('client_secret', process.env.facebook_app_secret);
 
@@ -88,8 +89,9 @@ app.get('/auth/facebook', function(req, res) {
     , "client_secret":  conf.client_secret
     , "code":           req.query.code
   }, function (err, facebookRes) {
-    res.redirect('/UserHasLoggedIn');
+    res.redirect('/social');
   });
 
+  exports.facebook = facebook;
 
 });
