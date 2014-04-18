@@ -7,11 +7,10 @@ var handlebars = require('express3-handlebars');
 var twit = require('twit');
 var app = express();
 
-
 //route files to load
 var index = require('./routes/index');
 var social = require('./routes/social');
-var graph = require('fbgraph');
+var data = require('./public/data/facebook')
 
 //database setup - uncomment to set up your database
 //var mongoose = require('mongoose');
@@ -25,15 +24,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.bodyParser());
 
 //routes
-app.get('/', index.view);
+//app.get('/', index.view);
 app.get('/social', social.view);
-app.post('/social', social.view);
+//app.post('/social', social.getSocial);
 
 
 //set environment ports and start application
 app.set('port', process.env.PORT || 3000);
 http.createServer(app).listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+console.log('Express server listening on port ' + app.get('port'));
 });
 
 // stuff I added
@@ -42,15 +41,15 @@ var dotenv = require('dotenv');
 dotenv.load();
 
 // Add facebook api setup
-
+var graph = require('fbgraph');
 //graph.authorize('client_id', process.env.facebook_app_id);
 //graph.authorize('client_secret', process.env.facebook_app_secret);
 
 var conf = {
-    client_id:      process.env.facebook_app_id
-  , client_secret:  process.env.facebook_app_secret
-  , scope:          'email, user_about_me, user_birthday, user_location, publish_stream'
-  , redirect_uri:   'http://localhost:3000/'
+    client_id: process.env.facebook_app_id
+  , client_secret: process.env.facebook_app_secret
+  , scope: 'email, user_about_me, user_birthday, user_location, publish_stream'
+  , redirect_uri: 'http://localhost:3000/'
 };
 
 
@@ -68,14 +67,14 @@ app.get('/auth/facebook', function(req, res) {
   // so we'll redirect to the oauth dialog
   if (!req.query.code) {
     var authUrl = graph.getOauthUrl({
-        "client_id":     conf.client_id
-      , "redirect_uri":  conf.redirect_uri
-      , "scope":         conf.scope
+        "client_id": conf.client_id
+      , "redirect_uri": conf.redirect_uri
+      , "scope": conf.scope
     });
 
     if (!req.query.error) { //checks whether a user denied the app facebook login/permissions
       res.redirect(authUrl);
-    } else {  //req.query.error == 'access_denied'
+    } else { //req.query.error == 'access_denied'
       res.send('access denied');
     }
     return;
@@ -84,14 +83,28 @@ app.get('/auth/facebook', function(req, res) {
   // code is set
   // we'll send that and get the access token
   graph.authorize({
-      "client_id":      conf.client_id
-    , "redirect_uri":   conf.redirect_uri
-    , "client_secret":  conf.client_secret
-    , "code":           req.query.code
+      "client_id": conf.client_id
+    , "redirect_uri": conf.redirect_uri
+    , "client_secret": conf.client_secret
+    , "code": req.query.code
   }, function (err, facebookRes) {
-    res.redirect('/social');
+    res.redirect('/UserHasLoggedIn');
   });
 
-  exports.facebook = facebook;
 
 });
+
+app.get('/social', function(req,res) {
+
+
+
+  var tempJSON = {};
+
+  tempJSON = graph.get('me?fields=id,name');
+  //console.log("tempJSON is " tempJSON[0]);
+  data.push(tempJSON);
+
+  res.render('social', data);
+}
+
+);
