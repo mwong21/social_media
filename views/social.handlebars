@@ -82,15 +82,21 @@ var loggedin = false;
              console.log('Good to see you, ' + response.email + '.');
              console.log('Good to see you, ' + response.id + '.');
              console.log(response);
-             testing(response);
 
-             d3.select("body").append("p").text("Welcome " + response.name);
+             d3.select("body").append("p").text("Profile");
+             d3.select("body").append("p").text("Name: " + response.name);
+             d3.select("body").append("p").text("Gender: " + response.gender);
+             d3.select("body").append("p").text("Birthday: " + response.birthday);
+
+             testing(response);
 
     });
 
 
+
+
     // added stuff
-    res.render('social');
+   // res.render('social');
 
   }
 
@@ -99,9 +105,28 @@ var loggedin = false;
   console.log(response);
 
 
-  FB.api('/'+response.id, function(response2) {
+  FB.api('/'+response.id + '/posts', function(response2) {
+
+      console.log("post");
       console.log(response2);
-      console.log(response2.birthday);
+      console.log(response2.data[1].place.name);
+
+      d3.select("body").append("br");
+
+      d3.select("body").append("p").text("Locations Visited:");
+
+      if(response2.data[0].place == null){console.log("worked");}
+
+      var dataLength = response2.data.length;
+
+      var i = 0;
+      while (i < dataLength) 
+      {
+        if(response2.data[i].place != null) {
+          d3.select("body").append("p").text(response2.data[i].place.name);
+        }
+        i++;
+      }      
 
     });
 
@@ -136,7 +161,7 @@ if(loggedin == true){
   Below we include the Login Button social plugin. This button uses the JavaScript SDK to
   present a graphical Login button that triggers the FB.login() function when clicked. -->
 
-<fb:login-button show-faces="true" width="200" max-rows="1" scope="email, user_birthday,user_likes, user_groups, user_photos"></fb:login-button>
+<fb:login-button show-faces="true" width="200" max-rows="1" scope="email, user_birthday,user_likes, user_groups, user_photos, user_status"></fb:login-button>
 
 <a href = "./social"> <button type="button">View recent posts</button> </a>
 
