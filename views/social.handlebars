@@ -3,6 +3,7 @@
   <title>
     Social Network App
   </title>
+  <style>body{background-color: pink}</style>
 </head>
 <body>
 
@@ -126,7 +127,12 @@ var loggedin = false;
           d3.select("body").append("p").text(response2.data[i].place.name);
         }
         i++;
-      }      
+      }  
+
+
+
+
+
 
     });
 
@@ -162,8 +168,6 @@ if(loggedin == true){
   present a graphical Login button that triggers the FB.login() function when clicked. -->
 
 <fb:login-button show-faces="true" width="200" max-rows="1" scope="email, user_birthday,user_likes, user_groups, user_photos, user_status"></fb:login-button>
-
-<a href = "./social"> <button type="button">View recent posts</button> </a>
 
 
 </form>

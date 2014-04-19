@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>
+    Twitter
+  </title>
+</head>
+  <style>body{background-color: pink}</style>
+<body>
+
+<h1>Twitter</h1>
+
+<a href = "https://api.twitter.com/oauth/request_token"> <button type="button">Twit</button> </a>
+
+<!--{{#each object}}
+<p>hello</p>
+
+
+
+{{/each}}
+-->
+
+<p>{{name}}</p>
+<a class="btn btn-block btn-social btn-twitter">
+    <i class="fa fa-twitter"></i> Sign in with Twitter
+  </a>
+  <a class="btn btn-social-icon btn-twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+
+<script src='http://platform.twitter.com/anywhere.js?id=vvhfeizLiUmWw2cRRO51DVyoP&v=1' type='text/javascript'></script>
+<span id='login'></span>
+    <script type=”text/javascript”>
+
+    twttr.anywhere(function (T) {
+    T(“#login”).connectButton();
+    });
+
+    </script>
+
+</body>
+</html>

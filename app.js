@@ -10,6 +10,7 @@ var app = express();
 //route files to load
 var index = require('./routes/index');
 var social = require('./routes/social');
+var twitter = require('./routes/twitter');
 var data = require('./public/data/facebook')
 
 //database setup - uncomment to set up your database
@@ -26,6 +27,12 @@ app.use(express.bodyParser());
 //routes
 //app.get('/', index.view);
 app.get('/social', social.view);
+app.get('/twitter', twitter.view)
+app.get('/search/tweet', function(req,res) {
+  res.render('/twitter', data)
+})
+
+app.post('/twitter', twitter.view);
 //app.post('/social', social.getSocial);
 
 
@@ -53,7 +60,7 @@ var conf = {
 };
 
 
-console.log(conf.client_id);
+//console.log(conf.client_id);
 
 // Routes
 
@@ -94,17 +101,48 @@ app.get('/auth/facebook', function(req, res) {
 
 });
 
-app.get('/social', function(req,res) {
+
+var Twit = require('twit')
+
+var T = new Twit({
+    consumer_key:         process.env.twitter_api_key
+  , consumer_secret:      process.env.twitter_api_secret
+  , access_token:         process.env.twitter_access_token
+  , access_token_secret:  process.env.twitter_access_token_secret
+})
+
+var stream = T.stream('statuses/filter', { track: 'San Diego'});
+
+stream.on('tweet', function (tweet) {
+
+var textArr = [];  // Text array
+
+var data = {name: tweet.name}
+
+//for(var i = 0; i < length; i++) {
+
+    //console.log(tweet.text);
+    textArr.push(data);
+
+    console.log(textArr.length)
+
+    //res.render('twitter', textArr)
+
+//}
+})
 
 
 
-  var tempJSON = {};
 
-  tempJSON = graph.get('me?fields=id,name');
-  //console.log("tempJSON is " tempJSON[0]);
-  data.push(tempJSON);
 
-  res.render('social', data);
-}
+//
+//  filter the twitter public stream by the word 'mango'.
+//
+//var stream = T.stream('statuses/filter', { track: 'mango' })
 
-);
+/*stream.on('tweet', function (tweet) {
+  console.log(tweet)
+})*/
+
+//console.log(T.getAuth());
+
